@@ -1,0 +1,6 @@
+{
+    "NoradUrl" : "https://celestrak.com/NORAD/elements/gp.php",
+    "Groups" : [ "weather" ],
+    "TempFolder" : "/tmp",
+    "TempFilesDays" : 1
+}
