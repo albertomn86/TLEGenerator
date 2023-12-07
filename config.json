@@ -1,6 +1,7 @@
 {
     "NoradUrl" : "https://celestrak.com/NORAD/elements/gp.php",
     "Groups" : [ "weather" ],
+    "SatellitesListPath" : "./satellites.json",
     "TempFolder" : "/tmp",
     "TempFilesDays" : 1
 }

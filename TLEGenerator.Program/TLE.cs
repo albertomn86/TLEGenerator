@@ -10,4 +10,9 @@ public sealed class TLE
     {
         return Line2.Split()[1];
     }
+
+    public override string ToString()
+    {
+        return $"{Title}\r\n{Line1}\r\n{Line2}";
+    }
 }

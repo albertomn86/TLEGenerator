@@ -6,6 +6,7 @@ public class Config
 {
     public string NoradUrl { get; set; } = "https://celestrak.com/NORAD/elements/gp.php";
     public List<string> Groups { get; set; } = [];
+    public string SatellitesListPath { get; set; } = "./satellites.json";
     public string TempFolder { get; set; } = "/tmp";
     public int TempFilesDays { get; set; } = 1;
 
@@ -22,6 +23,7 @@ public class Config
             {
                 NoradUrl = items.NoradUrl;
                 Groups = items.Groups;
+                SatellitesListPath = items.SatellitesListPath;
                 TempFolder = items.TempFolder;
                 TempFilesDays = items.TempFilesDays;
             }

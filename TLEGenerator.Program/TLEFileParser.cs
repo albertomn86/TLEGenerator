@@ -1,3 +1,5 @@
+using System.Data;
+
 namespace TLEGenerator.Program;
 
 public class TLEFileParser
@@ -15,7 +17,7 @@ public class TLEFileParser
         ArgumentException.ThrowIfNullOrWhiteSpace(filePath);
 
         using StreamReader sr = File.OpenText(filePath);
-        string line;
+        string? line;
 
         while ((line = sr.ReadLine()) != null)
         {
@@ -24,8 +26,8 @@ public class TLEFileParser
                 TLE tle = new()
                 {
                     Title = line,
-                    Line1 = sr.ReadLine(),
-                    Line2 = sr.ReadLine()
+                    Line1 = sr.ReadLine() ?? throw new NoNullAllowedException(),
+                    Line2 = sr.ReadLine() ?? throw new NoNullAllowedException()
                 };
                 TLEData.TryAdd(tle.GetId(), tle);
             }

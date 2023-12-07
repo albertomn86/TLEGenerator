@@ -59,4 +59,9 @@ public class TLEDataManager
 
         return (DateTime.Now - lastModified).TotalDays >= config.TempFilesDays;
     }
+
+    public int GetApiRequestsNumber()
+    {
+        return tleDataDownloader.GetApiRequestsNumber();
+    }
 }

@@ -4,10 +4,11 @@ public class TLEDataDownloader
 {
     private readonly HttpClient httpClient;
     private readonly Config config;
+    private int ApiRequests;
 
     public TLEDataDownloader(Config config)
     {
-        httpClient ??= new();
+        httpClient = new();
         this.config = config;
     }
 
@@ -39,6 +40,7 @@ public class TLEDataDownloader
 
     private async Task<Stream> GetFileStream(string url)
     {
+        ApiRequests += 1;
         Stream fileStream = await httpClient.GetStreamAsync(url);
 
         return fileStream;
@@ -49,5 +51,10 @@ public class TLEDataDownloader
         using FileStream outputFileStream = new(destinationPath, FileMode.Create);
 
         await fileStream.CopyToAsync(outputFileStream);
+    }
+
+    public int GetApiRequestsNumber()
+    {
+        return ApiRequests;
     }
 }
