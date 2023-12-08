@@ -6,8 +6,9 @@ public class TLEDataManagerTest
     Config config = new()
     {
         NoradUrl = "fakeUrl",
-        Groups = ["weather"],
-        TempFolder = "TestData"
+        Groups = ["test"],
+        TempFolder = "TestData",
+        TempFilesDays = 65000
     };
 
     [TestMethod]

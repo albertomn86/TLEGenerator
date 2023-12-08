@@ -7,6 +7,7 @@ public class Config
     public string NoradUrl { get; set; } = "https://celestrak.com/NORAD/elements/gp.php";
     public List<string> Groups { get; set; } = [];
     public string SatellitesListPath { get; set; } = "./satellites.json";
+    public string OutputFilePath { get; set; } = "./custom_TLE.txt";
     public string TempFolder { get; set; } = "/tmp";
     public int TempFilesDays { get; set; } = 1;
 

@@ -1,7 +1,8 @@
 {
     "NoradUrl" : "https://celestrak.com/NORAD/elements/gp.php",
-    "Groups" : [ "weather" ],
+    "Groups" : [ "weather", "amateur" ],
     "SatellitesListPath" : "./satellites.json",
+    "OutputFilePath" : "./custom_TLE.txt",
     "TempFolder" : "/tmp",
     "TempFilesDays" : 1
 }

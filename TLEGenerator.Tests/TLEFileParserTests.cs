@@ -3,7 +3,7 @@ namespace TLEGenerator.Tests;
 [TestClass]
 public class TLEFileParserTests
 {
-    const string TestFile = "./TestData/weather.txt";
+    const string TestFile = "./TestData/test.txt";
 
     [TestMethod]
     [DataRow("")]

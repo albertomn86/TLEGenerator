@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <Content Include="../config.json" CopyToOutputDirectory="Always" />
+    <Content Include="../satellites.json" CopyToOutputDirectory="Always" />
   </ItemGroup>
 
 </Project>
