@@ -1,4 +1,4 @@
-namespace TLEGenerator.Program;
+namespace TLEGenerator;
 
 public class TLEDataManager
 {
@@ -53,7 +53,8 @@ public class TLEDataManager
         }
     }
 
-    private bool IsOldFile(string path){
+    private bool IsOldFile(string path)
+    {
 
         DateTime lastModified = File.GetLastWriteTime(path);
 

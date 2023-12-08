@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../TLEGenerator.Program/TLEGenerator.Program.csproj" />
+    <ProjectReference Include="../TLEGenerator/TLEGenerator.csproj" />
   </ItemGroup>
 
   <ItemGroup>

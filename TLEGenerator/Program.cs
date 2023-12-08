@@ -1,4 +1,4 @@
-﻿namespace TLEGenerator.Program;
+﻿namespace TLEGenerator;
 
 class Program
 {
@@ -8,12 +8,12 @@ class Program
         commandLineOptions.ParseArgs(args);
 
         Config config = new();
-        config.ReadConfigFile(); 
+        config.ReadConfigFile();
 
         List<string> satellites = commandLineOptions.Input == null ?
             SatellitesReader.ReadList(config.SatellitesListPath) :
             [.. commandLineOptions.Input.Split(',')];
-    
+
         TLEDataManager tleDataManager = new(config);
         tleDataManager.RetrieveGroupsData();
 
@@ -25,7 +25,8 @@ class Program
         {
             var tle = tleDataManager.GetTLE(satellite);
 
-            if (tle != null) {
+            if (tle != null)
+            {
                 Console.WriteLine($"✓ Saved TLE for {tle.Title.Trim()} ({satellite})");
                 satellitesFound += 1;
                 outputFile.WriteLine(tle.ToString());

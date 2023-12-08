@@ -1,6 +1,6 @@
 using System.Data;
 
-namespace TLEGenerator.Program;
+namespace TLEGenerator;
 
 public class TLEFileParser
 {

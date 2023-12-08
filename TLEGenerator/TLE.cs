@@ -1,4 +1,4 @@
-namespace TLEGenerator.Program;
+namespace TLEGenerator;
 
 public sealed class TLE
 {

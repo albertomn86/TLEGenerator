@@ -5,7 +5,7 @@ VisualStudioVersion = 17.5.002.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TLEGenerator.Tests", "TLEGenerator.Tests\TLEGenerator.Tests.csproj", "{402CF7F0-966A-440F-A57B-3E72964A1993}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TLEGenerator.Program", "TLEGenerator.Program\TLEGenerator.Program.csproj", "{4917CDF5-8B14-495B-A65F-6897B3B7645D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TLEGenerator", "TLEGenerator\TLEGenerator.csproj", "{4917CDF5-8B14-495B-A65F-6897B3B7645D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
