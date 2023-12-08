@@ -8,6 +8,11 @@
     <AssemblyName>tlegenerator</AssemblyName>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <DebugSymbols>False</DebugSymbols>
+    <DebugType>None</DebugType>
+  </PropertyGroup>
+
   <ItemGroup>
     <Content Include="../config.json" CopyToOutputDirectory="Always" />
     <Content Include="../satellites.json" CopyToOutputDirectory="Always" />
