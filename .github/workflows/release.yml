@@ -21,7 +21,7 @@ jobs:
     - uses: actions/upload-artifact@v3
       with:
         name: tlegenerator-linux-x64
-        path: /linux-x64
+        path: linux-x64/
 
   build_win:
     name: Windows
@@ -39,7 +39,7 @@ jobs:
     - uses: actions/upload-artifact@v3
       with:
         name: tlegenerator-windows-x64
-        path: /windows-x64
+        path: windows-x64/
 
   build_osx:
     name: OSX
@@ -57,4 +57,4 @@ jobs:
     - uses: actions/upload-artifact@v3
       with:
         name: tlegenerator-osx-x64
-        path: /osx-x64
+        path: osx-x64/
