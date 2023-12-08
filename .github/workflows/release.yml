@@ -13,11 +13,11 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 5.0.x
+        dotnet-version: 8.0.x
     - name: Restore dependencies
       run: dotnet restore
     - name: Publish
-      run: dotnet publish TLEGenerator -c Release -f net5.0 --no-restore --output linux-x64
+      run: dotnet publish TLEGenerator -c Release --no-restore --output linux-x64
     - uses: actions/upload-artifact@v3
       with:
         name: tlegenerator-linux-x64
@@ -31,11 +31,11 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 5.0.x
+        dotnet-version: 8.0.x
     - name: Restore dependencies
       run: dotnet restore
     - name: Publish
-      run: dotnet publish TLEGenerator -c Release -f net5.0 --no-restore --output windows-x64
+      run: dotnet publish TLEGenerator -c Release --no-restore --output windows-x64
     - uses: actions/upload-artifact@v3
       with:
         name: tlegenerator-windows-x64
@@ -49,11 +49,11 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 5.0.x
+        dotnet-version: 8.0.x
     - name: Restore dependencies
       run: dotnet restore
     - name: Publish
-      run: dotnet publish TLEGenerator -c Release -f net5.0 --no-restore --output osx-x64
+      run: dotnet publish TLEGenerator -c Release --no-restore --output osx-x64
     - uses: actions/upload-artifact@v3
       with:
         name: tlegenerator-osx-x64

@@ -15,15 +15,18 @@ Custom TLE file generator.
 
 ## Configuration file (config.json):
 
-| Value | Default | Description |
+| Value | Default value | Description |
 |-|-|-|
 | NoradUrl | https://celestrak.com/NORAD/elements/gp.php | NORAD API URL. |
-| Groups | weather, amateur | Groups to retrieve the TLE data. Consider add or remove groups to reduce the number of API requests and increase performace. |
+| Groups | None | Groups to retrieve the TLE data. Consider add or remove groups to reduce the number of API requests and increase the performace. |
 | SatellitesListPath | satellites.json | File containing the NORAD catalog numbers for the tracked satellites. Get more catalog numbers at https://www.celestrak.com/satcat/search.php |
 | OutputFilePath | custom_TLE.txt | Generated file. |
-| TempFolder | /tmp | Folder where downloaded files are stored. |
+| TempFolder | System user temp folder | Folder where temporary downloaded files are stored. |
 | TempFilesDays | 1 | Number of days that the temporary files are valid before downloading them again. |
 
+
+## Requirements:
+This application needs the .NET 8.0 Runtime. You can download it here: [Download .NET 8.0 Runtime](https://dotnet.microsoft.com/en-us/download/dotnet/8.0/runtime)
 
 ## Examples:
 
