@@ -1,21 +1,25 @@
-﻿using System.Text;
-
-namespace TLEGenerator.Program;
+﻿namespace TLEGenerator.Program;
 
 class Program
 {
     static void Main(string[] args)
     {
+        CommandLineOptions commandLineOptions = new();
+        commandLineOptions.ParseArgs(args);
+
         Config config = new();
         config.ReadConfigFile(); 
 
-        List<string> satellites = SatellitesReader.ReadList(config.SatellitesListPath);
+        List<string> satellites = commandLineOptions.Input == null ?
+            SatellitesReader.ReadList(config.SatellitesListPath) :
+            [.. commandLineOptions.Input.Split(',')];
     
         TLEDataManager tleDataManager = new(config);
         tleDataManager.RetrieveGroupsData();
 
         int satellitesFound = 0;
-        using StreamWriter outputFile = new StreamWriter(config.OutputFilePath);
+        string outputFilePath = commandLineOptions.OutputFilePath ?? config.OutputFilePath;
+        using StreamWriter outputFile = new(outputFilePath);
 
         foreach (var satellite in satellites)
         {
