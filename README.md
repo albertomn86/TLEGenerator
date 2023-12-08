@@ -1,3 +1,5 @@
+[![CI](https://github.com/albertomn86/TLEGenerator/actions/workflows/ci.yml/badge.svg)](https://github.com/albertomn86/TLEGenerator/actions/workflows/ci.yml)
+
 # TLE Generator
 
 Custom TLE file generator.

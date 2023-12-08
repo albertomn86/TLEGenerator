@@ -1,8 +1,9 @@
 name: Release
 
 on:
-  push:
-    branches: [ "master" ]
+  workflow_dispatch:
+  release:
+    types: [published]
 
 jobs:
   build_linux:
