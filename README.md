@@ -4,7 +4,7 @@ Custom TLE file generator.
 
 ## Usage:
 
-`TLEGenerator [-i INPUT] [-o OUTPUT]`
+`tlegenerator [-i INPUT] [-o OUTPUT]`
 
 ## Optional arguments:
 
@@ -13,7 +13,7 @@ Custom TLE file generator.
   -o OUTPUT     Output file path.
 ```
 
-## Configuration file (config.json)
+## Configuration file (config.json):
 
 | Value | Default | Description |
 |-|-|-|
@@ -30,7 +30,7 @@ Custom TLE file generator.
 Generate a TLE file with the NORAD catalog numbers included in the file `satellites.txt`:
 
 ```
-# ./TLEGenerator
+# ./tlegenerator
 
 ✓ Saved TLE for METEOR-M2 3 (57166)
 ✓ Saved TLE for NOAA 15 (25338)
@@ -45,7 +45,7 @@ Output TLE file: /Users/ea7koo/Documents/TLEGenerator/custom_TLE.txt
 Generate the TLE file `weather.txt` with the NORAD catalog numbers `25338`, `28654`, and `33591`:
 
 ```
-# ./TLEGenerator -o weather.txt -i 25338,28654,33591
+# ./tlegenerator -o weather.txt -i 25338,28654,33591
 
 ✓ Saved TLE for NOAA 15 (25338)
 ✓ Saved TLE for NOAA 18 (28654)
