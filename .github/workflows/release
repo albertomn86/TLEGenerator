@@ -1,0 +1,60 @@
+name: CI
+
+on:
+  push:
+    branches: [ "master" ]
+
+jobs:
+  build_linux:
+    name: Linux
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 8.0.x
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Publish
+      run: dotnet publish TLEGenerator -c Release --no-restore --output linux-x64
+    - uses: actions/upload-artifact@v3
+      with:
+        name: tlegenerator-linux-x64
+        path: /linux-x64
+
+  build_win:
+    name: Windows
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 8.0.x
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Publish
+      run: dotnet publish TLEGenerator -c Release --no-restore --output windows-x64
+    - uses: actions/upload-artifact@v3
+      with:
+        name: tlegenerator-windows-x64
+        path: /windows-x64
+
+  build_osx:
+    name: OSX
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 8.0.x
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Publish
+      run: dotnet publish TLEGenerator -c Release --no-restore
+    - uses: actions/upload-artifact@v3
+      with:
+        name: tlegenerator-osx-x64
+        path: /osx-x64
