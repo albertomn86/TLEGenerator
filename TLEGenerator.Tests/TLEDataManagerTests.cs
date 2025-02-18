@@ -1,4 +1,4 @@
-namespace TLEGenerator.Tests;
+namespace TleGenerator.Tests;
 
 [TestClass]
 public class TLEDataManagerTest

@@ -1,4 +1,4 @@
-namespace TLEGenerator;
+namespace TleGenerator;
 
 public class CommandLineOptions
 {

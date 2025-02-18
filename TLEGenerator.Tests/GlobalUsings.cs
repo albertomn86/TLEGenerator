@@ -1,2 +1,2 @@
 global using Microsoft.VisualStudio.TestTools.UnitTesting;
-global using TLEGenerator;
+global using TleGenerator;

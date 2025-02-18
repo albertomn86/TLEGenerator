@@ -1,6 +1,6 @@
 using System.Text.Json;
 
-namespace TLEGenerator;
+namespace TleGenerator;
 
 public class Config
 {

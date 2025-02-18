@@ -1,6 +1,6 @@
-namespace TLEGenerator;
+namespace TleGenerator;
 
-public sealed class TLE
+public sealed class Tle
 {
     public required string Title { get; set; }
     public required string Line1 { get; set; }

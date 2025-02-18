@@ -1,4 +1,4 @@
-﻿namespace TLEGenerator;
+﻿namespace TleGenerator;
 
 class Program
 {
@@ -37,7 +37,6 @@ class Program
         }
 
         Console.WriteLine($"TLEs retrieved: {satellitesFound}/{satellites.Count}");
-        Console.WriteLine($"API requests: {tleDataManager.GetApiRequestsNumber()}");
         Console.WriteLine($"Output TLE file: {Path.GetFullPath(outputFilePath)}");
     }
 }

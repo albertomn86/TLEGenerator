@@ -1,4 +1,4 @@
-namespace TLEGenerator.Tests;
+namespace TleGenerator.Tests;
 
 [TestClass]
 public class TLEFileParserTests
@@ -10,50 +10,50 @@ public class TLEFileParserTests
     [DataRow(" ")]
     public void ShouldReturnExceptionWhenPathIsInvalid(string testPath)
     {
-        TLEFileParser sut = new();
+        TleDataCarrier tleDataCarrier = new();
 
-        Assert.ThrowsException<ArgumentException>(() => sut.ParseFile(testPath));
+        Assert.ThrowsException<ArgumentException>(() => TleHandler.ParseFile(testPath, tleDataCarrier));
     }
 
     [TestMethod]
     public void ShouldReturnExceptionWhenFileDoesNotExist()
     {
-        TLEFileParser sut = new();
+        TleDataCarrier tleDataCarrier = new();
 
-        Assert.ThrowsException<FileNotFoundException>(() => sut.ParseFile("./fake.txt"));
+        Assert.ThrowsException<FileNotFoundException>(() => TleHandler.ParseFile("./fake.txt", tleDataCarrier));
     }
 
     [TestMethod]
     public void ShouldParseTheSpecifiedFile()
     {
-        TLEFileParser sut = new();
+        TleDataCarrier tleDataCarrier = new();
 
-        sut.ParseFile(TestFile);
+        TleHandler.ParseFile(TestFile, tleDataCarrier);
 
-        Assert.AreEqual(10, sut.Size());
+        Assert.AreEqual(10, tleDataCarrier.Size());
     }
 
     [TestMethod]
     public void ShouldAvoidDuplicates()
     {
-        TLEFileParser sut = new();
+        TleDataCarrier tleDataCarrier = new();
 
-        sut.ParseFile(TestFile);
-        sut.ParseFile(TestFile);
+        TleHandler.ParseFile(TestFile, tleDataCarrier);
+        TleHandler.ParseFile(TestFile, tleDataCarrier);
 
-        Assert.AreEqual(10, sut.Size());
+        Assert.AreEqual(10, tleDataCarrier.Size());
     }
 
     [TestMethod]
     public void ShouldReturnNullWhenTheRequestedDataDoesNotExist()
     {
-        TLEFileParser sut = new();
+        TleDataCarrier tleDataCarrier = new();
 
-        sut.ParseFile(TestFile);
+        TleHandler.ParseFile(TestFile, tleDataCarrier);
 
-        Assert.AreEqual(10, sut.Size());
+        Assert.AreEqual(10, tleDataCarrier.Size());
 
-        var tle = sut.Get("0");
+        var tle = tleDataCarrier.Get("0");
 
         Assert.IsNull(tle);
     }
@@ -61,13 +61,13 @@ public class TLEFileParserTests
     [TestMethod]
     public void ShouldRetrieveTheRequestedDataIfExists()
     {
-        TLEFileParser sut = new();
+        TleDataCarrier tleDataCarrier = new();
 
-        sut.ParseFile(TestFile);
+        TleHandler.ParseFile(TestFile, tleDataCarrier);
 
-        Assert.AreEqual(10, sut.Size());
+        Assert.AreEqual(10, tleDataCarrier.Size());
 
-        var tle = sut.Get("33591");
+        var tle = tleDataCarrier.Get("33591");
 
         Assert.IsNotNull(tle);
         Assert.IsTrue(tle.Title.StartsWith("NOAA 19"));

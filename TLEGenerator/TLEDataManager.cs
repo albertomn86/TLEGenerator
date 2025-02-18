@@ -1,26 +1,19 @@
-namespace TLEGenerator;
+namespace TleGenerator;
 
-public class TLEDataManager
+public class TLEDataManager(Config config)
 {
-    private readonly Config config;
-    private readonly TLEFileParser tleFileParser;
-    private readonly TLEDataDownloader tleDataDownloader;
+    private readonly Config _config = config;
+    private readonly TleDataCarrier tleDataCarrier = new();
+    private readonly TLEDataDownloader tleDataDownloader = new(config.NoradUrl);
 
-    public TLEDataManager(Config config)
+    public Tle? GetTLE(string catNumber)
     {
-        this.config = config;
-        tleFileParser = new();
-        tleDataDownloader = new(config);
-    }
-
-    public TLE? GetTLE(string catNumber)
-    {
-        var tle = tleFileParser.Get(catNumber);
+        var tle = tleDataCarrier.Get(catNumber);
 
         if (tle == null)
         {
             RetrieveDataByCatalogNumber(catNumber);
-            tle = tleFileParser.Get(catNumber);
+            tle = tleDataCarrier.Get(catNumber);
         }
 
         return tle;
@@ -28,41 +21,35 @@ public class TLEDataManager
 
     public void RetrieveDataByCatalogNumber(string catNumber)
     {
-        string path = Path.Combine(config.TempFolder, $"{catNumber}.txt");
+        string path = Path.Combine(_config.TempFolder, $"{catNumber}.txt");
 
         if (!File.Exists(path) || IsOldFile(path))
         {
             tleDataDownloader.DownloadByCatalogNumber(catNumber, path);
         }
 
-        tleFileParser.ParseFile(path);
+        TleHandler.ParseFile(path, tleDataCarrier);
     }
 
     public void RetrieveGroupsData()
     {
-        foreach (var group in config.Groups)
+        foreach (var group in _config.Groups)
         {
-            string path = Path.Combine(config.TempFolder, $"{group}.txt");
+            string path = Path.Combine(_config.TempFolder, $"{group}.txt");
 
             if (!File.Exists(path) || IsOldFile(path))
             {
                 tleDataDownloader.DownloadGroupFile(group, path);
             }
 
-            tleFileParser.ParseFile(path);
+            TleHandler.ParseFile(path, tleDataCarrier);
         }
     }
 
     private bool IsOldFile(string path)
     {
-
         DateTime lastModified = File.GetLastWriteTime(path);
 
-        return (DateTime.Now - lastModified).TotalDays >= config.TempFilesDays;
-    }
-
-    public int GetApiRequestsNumber()
-    {
-        return tleDataDownloader.GetApiRequestsNumber();
+        return (DateTime.Now - lastModified).TotalDays >= _config.TempFilesDays;
     }
 }

@@ -1,20 +1,14 @@
-namespace TLEGenerator;
+namespace TleGenerator;
 
-public class TLEDataDownloader
+public class TLEDataDownloader(string tleProviderUrl)
 {
-    private readonly HttpClient httpClient;
-    private readonly Config config;
-    private int ApiRequests;
-
-    public TLEDataDownloader(Config config)
-    {
-        httpClient = new();
-        this.config = config;
-    }
+    private readonly string _tleProviderUrl = tleProviderUrl;
+    private readonly Lazy<HttpClient> _httpClient = new();
+    private HttpClient HttpClient => _httpClient.Value;
 
     public void DownloadGroupFile(string group, string path)
     {
-        var url = $"{config.NoradUrl}?GROUP={group}&FORMAT=TLE";
+        var url = $"{_tleProviderUrl}?GROUP={group}&FORMAT=TLE";
 
         var task = Task.Run(() => DownloadAndSaveAsync(url, path));
         task.Wait();
@@ -22,7 +16,7 @@ public class TLEDataDownloader
 
     public void DownloadByCatalogNumber(string catNumber, string path)
     {
-        var url = $"{config.NoradUrl}?CATNR={catNumber}&FORMAT=TLE";
+        var url = $"{_tleProviderUrl}?CATNR={catNumber}&FORMAT=TLE";
 
         var task = Task.Run(() => DownloadAndSaveAsync(url, path));
         task.Wait();
@@ -30,7 +24,7 @@ public class TLEDataDownloader
 
     private async Task DownloadAndSaveAsync(string url, string destinationPath)
     {
-        Stream fileStream = await GetFileStream(url);
+        var fileStream = await GetFileStream(url);
 
         if (fileStream != Stream.Null)
         {
@@ -40,8 +34,7 @@ public class TLEDataDownloader
 
     private async Task<Stream> GetFileStream(string url)
     {
-        ApiRequests += 1;
-        Stream fileStream = await httpClient.GetStreamAsync(url);
+        var fileStream = await HttpClient.GetStreamAsync(url);
 
         return fileStream;
     }
@@ -51,10 +44,5 @@ public class TLEDataDownloader
         using FileStream outputFileStream = new(destinationPath, FileMode.Create);
 
         await fileStream.CopyToAsync(outputFileStream);
-    }
-
-    public int GetApiRequestsNumber()
-    {
-        return ApiRequests;
     }
 }
