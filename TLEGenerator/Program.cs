@@ -30,9 +30,11 @@ class Program
         services.AddSingleton<Config>();
         services.AddSingleton<ICommandLineOptions, CommandLineOptions>();
         services.AddSingleton<IFileStorage, FileStorage>();
+        services.AddSingleton<IFileManager, FileManager>();
         services.AddSingleton<ITleDataCarrier, TleDataCarrier>();
         services.AddSingleton<ITleDataDownloader, TleDataDownloader>();
         services.AddSingleton<ITleFileParser, TleFileParser>();
+        services.AddSingleton<IHttpClientWrapper, HttpClientWrapper>();
         services.AddSingleton<TleDataManager>();
 
         return services.BuildServiceProvider();
