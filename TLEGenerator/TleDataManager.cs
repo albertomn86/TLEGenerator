@@ -1,55 +1,53 @@
 namespace TleGenerator;
 
-public class TLEDataManager(Config config)
+public class TleDataManager(
+    IFileManager fileManager,
+    ITleDataCarrier tleDataCarrier,
+    ITleDataDownloader tleDataDownloader,
+    ITleFileParser tleFileParser) 
 {
-    private readonly Config _config = config;
-    private readonly TleDataCarrier tleDataCarrier = new();
-    private readonly TLEDataDownloader tleDataDownloader = new(config.NoradUrl);
+    private readonly IFileManager _fileManager = fileManager;
+    private readonly ITleDataCarrier _tleDataCarrier = tleDataCarrier;
+    private readonly ITleDataDownloader _tleDataDownloader = tleDataDownloader;
+    private readonly ITleFileParser _tleFileParser = tleFileParser;
 
-    public Tle? GetTLE(string catNumber)
+    public async Task<Tle?> GetTLEAsync(string catNumber)
     {
-        var tle = tleDataCarrier.Get(catNumber);
+        var tle = _tleDataCarrier.Get(catNumber);
 
         if (tle == null)
         {
-            RetrieveDataByCatalogNumber(catNumber);
-            tle = tleDataCarrier.Get(catNumber);
+            await RetrieveDataByCatalogNumberAsync(catNumber);
+            tle = _tleDataCarrier.Get(catNumber);
         }
 
         return tle;
     }
 
-    public void RetrieveDataByCatalogNumber(string catNumber)
+    public async Task RetrieveDataByCatalogNumberAsync(string catNumber)
     {
-        string path = Path.Combine(_config.TempFolder, $"{catNumber}.txt");
+        string path = _fileManager.GetFilePath(catNumber);
 
-        if (!File.Exists(path) || IsOldFile(path))
+        if (!File.Exists(path) || _fileManager.IsOldFile(path))
         {
-            tleDataDownloader.DownloadByCatalogNumber(catNumber, path);
+            await _tleDataDownloader.DownloadByCatalogNumberAsync(catNumber, path);
         }
 
-        TleHandler.ParseFile(path, tleDataCarrier);
+        await _tleFileParser.ParseFileAsync(path, _tleDataCarrier);
     }
 
-    public void RetrieveGroupsData()
+    public async Task RetrieveGroupsDataAsync(IEnumerable<string> groups)
     {
-        foreach (var group in _config.Groups)
+        foreach (var group in groups)
         {
-            string path = Path.Combine(_config.TempFolder, $"{group}.txt");
+            string path = _fileManager.GetFilePath(group);
 
-            if (!File.Exists(path) || IsOldFile(path))
+            if (!File.Exists(path) || _fileManager.IsOldFile(path))
             {
-                tleDataDownloader.DownloadGroupFile(group, path);
+                await _tleDataDownloader.DownloadGroupFileAsync(group, path);
             }
 
-            TleHandler.ParseFile(path, tleDataCarrier);
+            await _tleFileParser.ParseFileAsync(path, _tleDataCarrier);
         }
-    }
-
-    private bool IsOldFile(string path)
-    {
-        DateTime lastModified = File.GetLastWriteTime(path);
-
-        return (DateTime.Now - lastModified).TotalDays >= _config.TempFilesDays;
     }
 }

@@ -1,57 +1,58 @@
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 namespace TleGenerator.Tests;
 
 [TestClass]
 public class TLEFileParserTests
 {
     const string TestFile = "./TestData/test.txt";
+    private TleFileParser tleFileParser;
+    private TleDataCarrier tleDataCarrier;
+
+    [TestInitialize]
+    public void Setup()
+    {
+        tleFileParser = new(new FileStorage());
+        tleDataCarrier = new();
+    }
 
     [TestMethod]
     [DataRow("")]
     [DataRow(" ")]
     public void ShouldReturnExceptionWhenPathIsInvalid(string testPath)
     {
-        TleDataCarrier tleDataCarrier = new();
-
-        Assert.ThrowsException<ArgumentException>(() => TleHandler.ParseFile(testPath, tleDataCarrier));
+        Assert.ThrowsExceptionAsync<ArgumentException>(async () => await tleFileParser.ParseFileAsync(testPath, tleDataCarrier));
     }
 
     [TestMethod]
     public void ShouldReturnExceptionWhenFileDoesNotExist()
     {
-        TleDataCarrier tleDataCarrier = new();
-
-        Assert.ThrowsException<FileNotFoundException>(() => TleHandler.ParseFile("./fake.txt", tleDataCarrier));
+        Assert.ThrowsExceptionAsync<FileNotFoundException>(async () => await tleFileParser.ParseFileAsync("./fake.txt", tleDataCarrier));
     }
 
     [TestMethod]
-    public void ShouldParseTheSpecifiedFile()
+    public async Task ShouldParseTheSpecifiedFile()
     {
-        TleDataCarrier tleDataCarrier = new();
+        await tleFileParser.ParseFileAsync(TestFile, tleDataCarrier);
 
-        TleHandler.ParseFile(TestFile, tleDataCarrier);
-
-        Assert.AreEqual(10, tleDataCarrier.Size());
+        Assert.AreEqual(10, tleDataCarrier.Count);
     }
 
     [TestMethod]
-    public void ShouldAvoidDuplicates()
+    public async Task ShouldAvoidDuplicates()
     {
-        TleDataCarrier tleDataCarrier = new();
+        await tleFileParser.ParseFileAsync(TestFile, tleDataCarrier);
+        await tleFileParser.ParseFileAsync(TestFile, tleDataCarrier);
 
-        TleHandler.ParseFile(TestFile, tleDataCarrier);
-        TleHandler.ParseFile(TestFile, tleDataCarrier);
-
-        Assert.AreEqual(10, tleDataCarrier.Size());
+        Assert.AreEqual(10, tleDataCarrier.Count);
     }
 
     [TestMethod]
-    public void ShouldReturnNullWhenTheRequestedDataDoesNotExist()
+    public async Task ShouldReturnNullWhenTheRequestedDataDoesNotExist()
     {
-        TleDataCarrier tleDataCarrier = new();
+        await tleFileParser.ParseFileAsync(TestFile, tleDataCarrier);
 
-        TleHandler.ParseFile(TestFile, tleDataCarrier);
-
-        Assert.AreEqual(10, tleDataCarrier.Size());
+        Assert.AreEqual(10, tleDataCarrier.Count);
 
         var tle = tleDataCarrier.Get("0");
 
@@ -59,13 +60,11 @@ public class TLEFileParserTests
     }
 
     [TestMethod]
-    public void ShouldRetrieveTheRequestedDataIfExists()
+    public async Task ShouldRetrieveTheRequestedDataIfExists()
     {
-        TleDataCarrier tleDataCarrier = new();
+        await tleFileParser.ParseFileAsync(TestFile, tleDataCarrier);
 
-        TleHandler.ParseFile(TestFile, tleDataCarrier);
-
-        Assert.AreEqual(10, tleDataCarrier.Size());
+        Assert.AreEqual(10, tleDataCarrier.Count);
 
         var tle = tleDataCarrier.Get("33591");
 

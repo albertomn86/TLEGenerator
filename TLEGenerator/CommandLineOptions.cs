@@ -1,25 +1,35 @@
+using System.CommandLine;
+
 namespace TleGenerator;
 
-public class CommandLineOptions
+public class CommandLineOptions : ICommandLineOptions
 {
-    public string? Input { get; set; }
+    public string? Input { get; private set; }
+    public string? OutputFilePath { get; private set; }
 
-    public string? OutputFilePath { get; set; }
-
-    public void ParseArgs(string[] args)
+    public async Task ParseArgsAsync(string[] args)
     {
-        if (args.Length < 2) return;
+        var inputOption = new Option<string?>(
+            aliases: ["--input", "-i"],
+            description: "List of catalog numbers of satellites separated by commas.");
 
-        for (int i = 0; i < args.Length - 1; i++)
+        var outputOption = new Option<string?>(
+            aliases: ["--output", "-o"],
+            description: "Output file path.",
+            getDefaultValue: () => "custom_TLE.txt");
+
+        var rootCommand = new RootCommand
         {
-            if (args[i] == "-i")
-            {
-                Input = args[i + 1];
-            }
-            else if (args[i] == "-o")
-            {
-                OutputFilePath = args[i + 1];
-            }
-        }
+            inputOption,
+            outputOption
+        };
+
+        rootCommand.SetHandler((input, output) =>
+        {
+            Input = input;
+            OutputFilePath = output;
+        }, inputOption, outputOption);
+
+        await rootCommand.InvokeAsync(args);
     }
 }

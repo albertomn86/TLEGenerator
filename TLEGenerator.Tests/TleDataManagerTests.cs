@@ -1,68 +1,92 @@
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
+
 namespace TleGenerator.Tests;
 
 [TestClass]
 public class TLEDataManagerTest
 {
-    Config config = new()
+    private Config config;
+    private Mock<ITleDataDownloader> mockTleDataDownloader;
+    private Mock<ITleDataCarrier> mockTleDataCarrier;
+    private Mock<IFileManager> mockFileManager;
+    private Mock<ITleFileParser> mockTleFileParser;
+
+    [TestInitialize]
+    public void Setup()
     {
-        NoradUrl = "fakeUrl",
-        Groups = ["test"],
-        TempFolder = "TestData",
-        TempFilesDays = 65000
-    };
+        config = new Config
+        {
+            NoradUrl = "fakeUrl",
+            Groups = [ "test" ],
+            TempFolder = "TestData",
+            TempFilesDays = 65000
+        };
+
+        mockTleDataDownloader = new Mock<ITleDataDownloader>();
+        mockTleDataCarrier = new Mock<ITleDataCarrier>();
+        mockFileManager = new Mock<IFileManager>();
+        mockTleFileParser = new Mock<ITleFileParser>();
+
+        mockTleDataCarrier.Setup(c => c.Get("33591")).Returns(new Tle { Title = "NOAA 19", Line1 = "", Line2 = "" });
+        mockTleDataCarrier.Setup(c => c.Get("43013")).Returns(new Tle { Title = "NOAA 20", Line1 = "", Line2 = "" });
+        mockTleDataCarrier.Setup(c => c.Get("54234")).Returns(new Tle { Title = "NOAA 21", Line1 = "", Line2 = "" });
+        mockTleDataCarrier.Setup(c => c.Get("0101")).Returns((Tle)null);
+    }
 
     [TestMethod]
-    public void ShouldReturnTLEWhenCatalogNumberIsPresentInGroups()
+    public async Task ShouldReturnTLEWhenCatalogNumberIsPresentInGroups()
     {
-        TLEDataManager sut = new(config);
+        var sut = CreateTleDataManager();
 
-        sut.RetrieveGroupsData();
+        await sut.RetrieveGroupsDataAsync(config.Groups);
 
-        var tle = sut.GetTLE("33591");
+        var tle = await sut.GetTLEAsync("33591");
 
         Assert.IsNotNull(tle);
         Assert.IsTrue(tle.Title.StartsWith("NOAA 19"));
     }
 
     [TestMethod]
-    public void ShouldReturnTLEWhenCatalogNumberIsPresentInTempFolder()
+    public async Task ShouldReturnTLEWhenCatalogNumberIsPresentInTempFolder()
     {
-        TLEDataManager sut = new(config);
+        var sut = CreateTleDataManager();
 
-        sut.RetrieveGroupsData();
+        await sut.RetrieveGroupsDataAsync(config.Groups);
 
-        var tle = sut.GetTLE("43013");
+        var tle = await sut.GetTLEAsync("43013");
 
         Assert.IsNotNull(tle);
         Assert.IsTrue(tle.Title.StartsWith("NOAA 20"));
     }
 
     [TestMethod]
-    public void ShouldReturnTLEWhenCatalogNumberIsNotPresentInTempFolder()
+    public async Task ShouldReturnTLEWhenCatalogNumberIsNotPresentInTempFolder()
     {
-        config.NoradUrl = "https://celestrak.com/NORAD/elements/gp.php";
+        var sut = CreateTleDataManager();
 
-        TLEDataManager sut = new(config);
+        await sut.RetrieveGroupsDataAsync(config.Groups);
 
-        sut.RetrieveGroupsData();
-
-        var tle = sut.GetTLE("54234");
+        var tle = await sut.GetTLEAsync("54234");
 
         Assert.IsNotNull(tle);
         Assert.IsTrue(tle.Title.StartsWith("NOAA 21"));
     }
 
     [TestMethod]
-    public void ShouldReturnNullWhenCatalogNumberIsNotFound()
+    public async Task ShouldReturnNullWhenCatalogNumberIsNotFound()
     {
-        config.NoradUrl = "https://celestrak.com/NORAD/elements/gp.php";
+        var sut = CreateTleDataManager();
 
-        TLEDataManager sut = new(config);
+        await sut.RetrieveGroupsDataAsync(config.Groups);
 
-        sut.RetrieveGroupsData();
-
-        var tle = sut.GetTLE("0101");
+        var tle = await sut.GetTLEAsync("0101");
 
         Assert.IsNull(tle);
+    }
+
+    private TleDataManager CreateTleDataManager()
+    {
+        return new TleDataManager(mockFileManager.Object, mockTleDataCarrier.Object, mockTleDataDownloader.Object, mockTleFileParser.Object);
     }
 }
